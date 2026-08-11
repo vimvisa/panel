@@ -18,7 +18,7 @@
            <div class="slide" style="background-image: url('https://picsum.photos/1200/800?v=2')"></div>
         </div>
         <div class="overlay-content">
-            <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="logo">
+            <img src="logo.png" class="logo" onerror="this.src='https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png'">
             <h1 class="logo-text animated-3d-title">Visa Immigration VIM</h1>
             <p>Follow & Manage your Refugee case file</p>
         </div>
@@ -48,10 +48,13 @@
 
         <!-- دشبورد کامل بعد از ورود موفق -->
         <div id="dashboard" class="dashboard-container" style="display: none;">
-            <!-- هدر متحرک و ۳بعدی داخل دشبورد -->
+            <!-- هدر متحرک و ۳بعدی داخل دشبورد به همراه لوگو در سمت چپ -->
             <div class="dashboard-top-header">
-                <h2 class="animated-3d-title">Visa Immigration VIM</h2>
-                <h3 id="dashboardTitle" class="user-welcome">کاربر گرامی</h3>
+                <img src="logo.png" alt="Logo" class="header-logo-left" onerror="this.style.display='none'">
+                <div class="header-title-wrapper">
+                    <h2 class="animated-3d-title">Visa Immigration VIM</h2>
+                    <h3 id="dashboardTitle" class="user-welcome">کاربر گرامی</h3>
+                </div>
             </div>
 
             <div class="dashboard-content-layout">
@@ -80,7 +83,7 @@
                     <!-- بخش نمایش فرم‌مانند اطلاعات -->
                     <div id="applicationFormView" class="app-form-view"></div>
 
-                    <!-- بخش نمایش جدول عمومی -->
+                    <!-- بخش نمایش جدول عمومی داخل پنجره منظم -->
                     <div id="tableWrapper" class="table-responsive" style="display: none;"></div>
                 </div>
             </div>
@@ -213,14 +216,12 @@
         container.innerHTML = '';
 
         const countryHeader = globalHeaders[1] || 'Country'; // ستون B
-        // ستون I (ایندکس 8 یا هدر نهم)
-        const statusHeader = globalHeaders[8] || globalHeaders[globalHeaders.length - 1]; 
+        const statusHeader = globalHeaders[8] || globalHeaders[globalHeaders.length - 1]; // ستون I
 
         globalUserData.forEach((row, index) => {
             let countryName = row[countryHeader] || `Record ${index + 1}`;
             let statusValue = row[statusHeader] ? String(row[statusHeader]).trim().toUpperCase() : '';
 
-            // بررسی دقیق مقادیر ستون I
             let isApplied = !statusValue.includes('NO APPLIED');
 
             let btn = document.createElement('button');
