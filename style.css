@@ -3,24 +3,23 @@
     --primary-dark: #002171;
     --bg-light: #f4f7f6;
     --text-main: #333;
-    --error: #c62828;
     --success: #2e7d32;
+    --error: #c62828;
 }
 
 body, html {
     margin: 0; padding: 0; height: 100%;
     font-family: 'Segoe UI', Tahoma, sans-serif;
     background-color: var(--bg-light);
-    box-sizing: border-box;
 }
 
 .main-wrapper {
     display: flex;
     flex-direction: row-reverse;
-    min-height: calc(100vh - 100px);
+    min-height: 90vh;
 }
 
-/* بخش تصویر راست (در زمان لاگین) */
+/* بخش تصویر و اسلایدر در حالت لاگین */
 .visual-section {
     flex: 1.2;
     position: relative;
@@ -56,23 +55,33 @@ body, html {
     padding: 20px;
 }
 
-/* هدر ۳بعدی و متحرک */
-.animated-3d-header {
+.logo { width: 120px; filter: brightness(0) invert(1); margin-bottom: 15px; }
+
+/* هدر ۳بعدی و متحرک نام سایت */
+.animated-3d-title {
     font-size: 2.8rem;
     font-weight: 800;
     letter-spacing: 3px;
     color: #fff;
-    text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25);
-    animation: float3D 3s ease-in-out infinite alternate;
-    margin-bottom: 10px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, #ffffff, #90caf9, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textFloat 4s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
+    transform-style: preserve-3d;
 }
 
-@keyframes float3D {
-    0% { transform: translateY(0) rotateX(0deg); }
-    100% { transform: translateY(-8px) rotateX(5deg); }
+@keyframes textFloat {
+    0%, 100% { transform: translateY(0) rotateX(0deg); }
+    50% { transform: translateY(-5px) rotateX(5deg); }
 }
 
-/* فرم و دشبورد */
+@keyframes glow {
+    from { filter: drop-shadow(0 0 2px rgba(255,255,255,0.6)); }
+    to { filter: drop-shadow(0 0 10px rgba(144,202,249,0.9)); }
+}
+
+/* بخش فرم و دشبورد سمت چپ */
 .form-section {
     flex: 0.8;
     background: var(--bg-light);
@@ -83,6 +92,15 @@ body, html {
     padding: 40px;
     position: relative;
     transition: all 0.5s ease;
+}
+
+/* وقتی وارد دشبورد می‌شویم، کل صفحه را پوشش می‌دهد */
+.dashboard-fullscreen-mode {
+    flex: 100% !important;
+    width: 100% !important;
+    padding: 30px !important;
+    align-items: stretch !important;
+    background: #ffffff !important;
 }
 
 .lang-switcher {
@@ -101,13 +119,9 @@ body, html {
 .login-container {
     width: 100%;
     max-width: 380px;
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }
 
-h2 { color: var(--primary); font-size: 24px; margin-bottom: 25px; font-weight: 600; text-align: center; }
+h2#txt_login_header { color: var(--primary); font-size: 24px; margin-bottom: 30px; font-weight: 300; }
 
 .field-group { margin-bottom: 20px; width: 100%; }
 
@@ -125,237 +139,331 @@ button#loginBtn {
     font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.4s;
 }
 
-button#loginBtn:hover { background: var(--primary-dark); }
+button#loginBtn:hover { background: var(--primary-dark); letter-spacing: 1px; }
 
-/* --- دشبورد جدید با مینی سایدبار انیمیشنی --- */
+/* ساختار دشبورد جدید با سایدبار و محتوا */
 .dashboard-container {
-    display: flex;
     width: 100%;
-    height: 100%;
-    gap: 20px;
     animation: fadeIn 0.5s ease-in-out;
 }
 
-.mini-sidebar {
-    width: 260px;
-    background: white;
+.dashboard-top-header {
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+}
+
+.dashboard-top-header .animated-3d-title {
+    font-size: 2rem;
+    background: linear-gradient(45deg, var(--primary), #1976d2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.user-welcome {
+    color: #555;
+    font-size: 1.1rem;
+    margin-top: 5px;
+}
+
+.dashboard-content-layout {
+    display: flex;
+    gap: 25px;
+    min-height: 450px;
+}
+
+/* سایدبار انیمیشن‌دار کشورها */
+.sidebar-menu {
+    width: 280px;
+    background: #f8f9fa;
     border-radius: 12px;
-    padding: 20px 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    padding: 15px;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    border: 1px solid #e0e0e0;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex-shrink: 0;
-}
-
-.mini-sidebar h4 {
-    color: var(--primary);
-    margin-top: 0;
-    font-size: 1.1rem;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 10px;
-}
-
-.sidebar-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    max-height: 500px;
     overflow-y: auto;
-    max-height: 400px;
 }
 
-.nav-btn {
-    background: #f8f9fa;
-    border: 1px solid #e2e8f0;
+.sidebar-title {
+    font-weight: bold;
+    color: var(--primary);
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar-menu .menu-item {
+    background: white;
+    border: 1px solid #e0e0e0;
     padding: 12px 15px;
     border-radius: 8px;
     cursor: pointer;
     text-align: left;
-    font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 600;
+    color: #444;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
     transition: all 0.3s ease;
 }
 
-.nav-btn:hover {
-    background: #e2e8f0;
-    transform: translateX(4px);
+.sidebar-menu .menu-item:hover {
+    background: #e3f2fd;
+    border-color: var(--primary);
+    transform: translateX(-3px);
 }
 
-.nav-btn.active-nav {
+.sidebar-menu .menu-item.active-menu {
     background: var(--primary);
     color: white;
     border-color: var(--primary);
-    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.2);
+    box-shadow: 0 4px 10px rgba(13,71,161,0.3);
 }
 
-.text-green { color: var(--success); font-size: 1.1rem; }
-.text-red { color: var(--error); font-size: 1.1rem; }
+/* تیک‌مارک‌های سبز و قرمز ثبت‌نام */
+.badge-icon {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: white;
+}
+.badge-icon.registered { background-color: var(--success); }
+.badge-icon.unregistered { background-color: var(--error); animation: pulseRed 1.5s infinite; }
 
-.dashboard-content-area {
+@keyframes pulseRed {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.4); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(198, 40, 40, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(198, 40, 40, 0); }
+}
+
+/* محتوای اصلی نمایش فرم */
+.main-display-area {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    overflow-y: auto;
-    max-height: 80vh;
+    gap: 20px;
 }
 
-/* هدر پیام به‌روزرسانی (Update Msg) */
+/* کارت بزرگ پیام به‌روزرسانی (Update Msg) */
 .update-msg-banner {
-    background: linear-gradient(135deg, #fff3cd, #ffeeba);
-    border-left: 5px solid #ffc107;
-    padding: 15px 20px;
-    border-radius: 8px;
+    background: linear-gradient(135deg, #fff8e1, #ffecb3);
+    border-left: 5px solid #ffa000;
+    border-radius: 10px;
+    padding: 20px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    animation: slideDown 0.4s ease;
-}
-
-.update-icon { font-size: 1.8rem; color: #856404; }
-.update-title { font-weight: bold; color: #856404; display: block; font-size: 0.9rem; }
-.update-text-content p { margin: 3px 0 0 0; color: #533f03; font-size: 1rem; font-weight: 600; }
-
-/* نمای فرم اپلیکیشن */
-.app-form-card {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    animation: slideInDown 0.4s ease;
 }
 
-.app-form-card h3 { color: var(--primary); margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.update-msg-icon {
+    font-size: 1.8rem;
+    color: #ffa000;
+}
 
-.form-grid-items {
+.update-msg-body h4 {
+    margin: 0 0 5px 0;
+    color: #b78103;
+    font-size: 1.1rem;
+}
+
+.update-msg-body p {
+    margin: 0;
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* نمایش فیلدها شبیه Application Form */
+.app-form-view {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 15px;
-    margin-top: 15px;
+    background: #fafafa;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    max-height: 400px;
+    overflow-y: auto;
 }
 
-.form-item-box {
-    background: #f8f9fa;
+.form-field-box {
+    background: white;
     padding: 12px 15px;
     border-radius: 8px;
-    border: 1px solid #e9ecef;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
-.form-label { display: block; font-size: 0.8rem; color: #6c75d7; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; }
-.form-value { font-size: 1rem; color: #333; font-weight: 600; }
+.form-field-box label {
+    display: block;
+    font-size: 0.8rem;
+    color: #777;
+    margin-bottom: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
 
-/* جدول نمای کلی */
-.table-responsive-box {
+.form-field-val {
+    font-size: 1rem;
+    color: #222;
+    font-weight: 500;
+}
+
+/* جدول عمومی تمام پرونده‌ها */
+.table-responsive {
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    animation: fadeIn 0.4s ease;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
     background: white;
-    border-radius: 12px;
-    overflow-x: auto;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    text-align: center;
+    font-size: 0.9rem;
 }
 
-table { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.9rem; }
-th, td { padding: 12px 15px; border-bottom: 1px solid #eee; color: #444; }
-th { background-color: var(--primary); color: white; position: sticky; top: 0; z-index: 2; }
-th.special-header-th { background-color: #ff9800; color: white; font-size: 1rem; animation: pulseHeader 2s infinite; }
+th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    color: #444;
+}
+
+th {
+    background-color: var(--primary);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
 
 tr:hover { background-color: #f1f5f9; }
 
-@keyframes pulseHeader {
-    0% { background-color: #ff9800; }
-    50% { background-color: #f57c00; }
-    100% { background-color: #ff9800; }
-}
-
 .logout-btn {
-    align-self: flex-start;
-    padding: 10px 20px;
+    margin-top: 25px;
+    padding: 12px 30px;
     background: var(--error);
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-    transition: 0.2s;
-    margin-top: 10px;
-}
-.logout-btn:hover { background: #b71c1c; }
-
-/* فوتر انیمیشنی با شبکه‌های اجتماعی */
-.animated-footer {
-    background: #111;
-    color: #bbb;
-    padding: 30px 10%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    text-align: center;
-    border-top: 3px solid var(--primary);
-    animation: footerGlow 4s infinite alternate;
-}
-
-@keyframes footerGlow {
-    0% { border-color: var(--primary); }
-    100% { border-color: #ff9800; }
-}
-
-.footer-sec h4 { color: #fff; margin-bottom: 15px; }
-.footer-sec a { color: #888; text-decoration: none; display: block; margin: 6px 0; font-size: 13px; transition: 0.3s; }
-.footer-sec a:hover { color: #fff; transform: scale(1.05); }
-
-.social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 10px;
-}
-
-.social-btn {
-    padding: 8px 16px;
-    border-radius: 20px;
-    color: white !important;
-    font-weight: bold;
-    font-size: 12px;
+    transition: 0.3s;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    transition: transform 0.3s ease;
+    gap: 8px;
 }
 
-.social-btn.whatsapp { background: #25d366; }
-.social-btn.telegram { background: #0088cc; }
-.social-btn:hover { transform: translateY(-3px); }
+.logout-btn:hover { background: #a71d1d; transform: translateY(-2px); }
 
-/* لودینگ آنلاین رایگان */
-#loading {
-    display: none;
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(255,255,255,0.9);
-    z-index: 5000;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    font-weight: bold;
-    color: var(--primary);
-}
-
-/* پنجره مودال خطا */
+/* مودال خطا */
 .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; backdrop-filter: blur(4px); }
 .modal-content { background: white; margin: 15% auto; padding: 25px; width: 90%; max-width: 350px; border-radius: 12px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .modal-content h3 { color: var(--error); margin-bottom: 10px; font-size: 1.3rem; }
 .close-btn { background: var(--error); color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; }
 
-.animate-fade { animation: fadeIn 0.4s ease-in-out; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+/* فوتر انیمیشن‌دار و دکمه‌های شبکه‌های اجتماعی */
+footer.animated-footer {
+    background: #111;
+    color: #aaa;
+    padding: 30px 20px;
+    text-align: center;
+    border-top: 3px solid var(--primary);
+}
 
-/* ریسپانسیو کامل موبایل و دسکتاپ */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.social-btn {
+    width: 45px; height: 45px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: footerIconBounce 3s ease-in-out infinite;
+}
+
+.social-btn.whatsapp { background: #25d366; animation-delay: 0s; }
+.social-btn.telegram { background: #0088cc; animation-delay: 0.5s; }
+.social-btn.email { background: #ea4335; animation-delay: 1s; }
+.social-btn.contact { background: var(--primary); animation-delay: 1.5s; }
+
+.social-btn:hover {
+    transform: scale(1.15) rotate(10deg);
+    box-shadow: 0 0 15px rgba(255,255,255,0.4);
+}
+
+@keyframes footerIconBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.footer-info p { margin: 0; font-size: 0.85rem; color: #777; }
+
+/* لودینگ سبک و رایگان آنلاین */
+#loading {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(255, 255, 255, 0.85);
+    z-index: 5000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    backdrop-filter: blur(3px);
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loading p {
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ریسپانسیو فوق‌العاده دقیق موبایل و دسکتاپ */
 @media (max-width: 900px) {
     .main-wrapper { flex-direction: column; }
-    .visual-section { height: 220px; flex: none; }
-    .form-section { flex: none; padding: 20px; }
-    .dashboard-container { flex-direction: column; }
-    .mini-sidebar { width: 100%; max-height: 150px; }
-    .animated-3d-header { font-size: 1.8rem; }
+    .visual-section { height: 260px; flex: none; }
+    .form-section { flex: none; padding: 30px 15px; }
+    .dashboard-fullscreen-mode { padding: 15px !important; }
+    .dashboard-content-layout { flex-direction: column; }
+    .sidebar-menu { width: 100%; max-height: 200px; }
+    .animated-3d-title { font-size: 2rem; }
 }
