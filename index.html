@@ -11,15 +11,15 @@
 <body>
 
 <div class="main-wrapper" id="mainWrapper">
-    <!-- بخش بصری (تصاویر اسلایدر) - در حالت دشبورد کاملاً مخفی می‌شود -->
+    <!-- بخش تصویر و اسلایدر (فقط در حالت لاگین نمایش داده می‌شود و بعد از ورود کاملاً مخفی می‌گردد) -->
     <div class="visual-section" id="visualSection">
         <div class="header-slider">
            <div class="slide active" style="background-image: url('https://picsum.photos/1200/800?v=1')"></div>
            <div class="slide" style="background-image: url('https://picsum.photos/1200/800?v=2')"></div>
         </div>
         <div class="overlay-content">
-            <!-- هدر متحرک و ۳بعدی -->
-            <div class="animated-3d-header">Visa Immigration VIM</div>
+            <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="logo">
+            <h1 class="logo-text animated-3d-title">Visa Immigration VIM</h1>
             <p>Follow & Manage your Refugee case file</p>
         </div>
     </div>
@@ -46,71 +46,54 @@
             <button id="loginBtn">Search Status</button>
         </div>
 
-        <!-- دشبورد اصلی که بعد از ورود نمایش داده می‌شود -->
+        <!-- دشبورد کامل بعد از ورود موفق -->
         <div id="dashboard" class="dashboard-container" style="display: none;">
-            
-            <!-- سایدبار کوچک انیمیشنی برای کشورها (ستون B) -->
-            <div class="mini-sidebar" id="miniSidebar">
-                <h4><i class="fa-solid fa-globe"></i> کشورها</h4>
-                <div class="sidebar-buttons" id="countryButtonsContainer">
-                    <!-- دکمه عمومی برای کل جدول -->
-                    <button class="nav-btn general-btn active-nav" onclick="showGeneralTable()">
-                        <i class="fa-solid fa-table"></i> نمای کلی جدول
-                    </button>
-                    <!-- دکمه‌های کشورها به صورت داینامیک اینجا اضافه می‌شوند -->
-                </div>
+            <!-- هدر متحرک و ۳بعدی داخل دشبورد -->
+            <div class="dashboard-top-header">
+                <h2 class="animated-3d-title">Visa Immigration VIM</h2>
+                <h3 id="dashboardTitle" class="user-welcome">کاربر گرامی</h3>
             </div>
 
-            <!-- محتوای اصلی دشبورد -->
-            <div class="dashboard-content-area">
-                <!-- هدر ویژه برای پیام به‌روزرسانی (Update Msg) -->
-                <div id="updateMsgBanner" class="update-msg-banner" style="display: none;">
-                    <div class="update-icon"><i class="fa-solid fa-bullhorn"></i></div>
-                    <div class="update-text-content">
-                        <span class="update-title">پیام مهم / Update Message:</span>
-                        <p id="updateMsgText">-</p>
+            <div class="dashboard-content-layout">
+                <!-- سایدبار انیمیشن‌دار کشورها (ستون B) -->
+                <div class="sidebar-menu" id="countrySidebar">
+                    <div class="sidebar-title"><i class="fa-solid fa-globe"></i> <span id="sb_title">کشورهای مقصد / خدمات</span></div>
+                    <button class="menu-item active-menu" onclick="showGeneralTable()">
+                        <i class="fa-solid fa-table-cells"></i> <span id="btn_all_recs">نمایش عمومی تمام پرونده‌ها</span>
+                    </button>
+                    <div id="countryButtonsList">
+                        <!-- دکمه‌های کشورها به صورت داینامیک اینجا اضافه می‌شوند -->
                     </div>
                 </div>
 
-                <div class="dashboard-header">
-                    <h2 id="dashboardTitle">اطلاعات پرونده</h2>
+                <!-- محتوای اصلی نمایش اطلاعات به صورت فرم اپلیکیشن یا جدول -->
+                <div class="main-display-area">
+                    <!-- کادر بزرگ و بسیار زیبای پیام به‌روزرسانی (Update Msg) -->
+                    <div id="updateMsgCard" class="update-msg-banner" style="display: none;">
+                        <div class="update-msg-icon"><i class="fa-solid fa-bullhorn fa-bounce"></i></div>
+                        <div class="update-msg-body">
+                            <h4>پیام مهم پرونده (Update Message)</h4>
+                            <p id="updateMsgText">-</p>
+                        </div>
+                    </div>
+
+                    <!-- بخش نمایش فرم‌مانند اطلاعات -->
+                    <div id="applicationFormView" class="app-form-view"></div>
+
+                    <!-- بخش نمایش جدول عمومی -->
+                    <div id="tableWrapper" class="table-responsive" style="display: none;"></div>
                 </div>
-
-                <!-- نمایش به سبک فرم اپلیکیشن یا جدول -->
-                <div id="dynamicDisplayArea"></div>
-
-                <button id="logoutBtn" class="logout-btn" onclick="location.reload()">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i> خروج از حساب
-                </button>
             </div>
+
+            <button id="logoutBtn" class="logout-btn" onclick="location.reload()"><i class="fa-solid fa-right-from-bracket"></i> خروج از حساب</button>
         </div>
     </div>
 </div>
 
-<!-- فوتر انیمیشنی با دکمه‌های شبکه‌های اجتماعی -->
-<footer id="main-footer" class="animated-footer">
-    <div class="footer-sec">
-        <h4 id="txt_footer_1_h">Lawyers & Support</h4>
-        <div class="social-icons">
-            <a href="https://wa.me/93780412583" target="_blank" class="social-btn whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-            <a href="https://t.me/visa_immigration_vim" target="_blank" class="social-btn telegram"><i class="fa-brands fa-telegram"></i> Telegram</a>
-        </div>
-    </div>
-    <div class="footer-sec">
-        <h4 id="txt_footer_2_h">Information</h4>
-        <a href="#">VISA_IMMIGRATION 2026</a>
-    </div>
-    <div class="footer-sec">
-        <h4 id="txt_footer_3_h">Contact</h4>
-        <a href="tel:+93780412583"><i class="fa-solid fa-phone"></i> +93 780 412 583</a>
-        <a href="mailto:immigration.tehran@tuta.io"><i class="fa-solid fa-envelope"></i> Email Us</a>
-    </div>
-</footer>
-
-<!-- انیمیشن لودینگ رایگان آنلاین -->
+<!-- انیمیشن لودینگ استاندارد و سبک -->
 <div id="loading">
-    <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading...">
-    <p>در حال بررسی اطلاعات در سرور گوگل...</p>
+    <div class="spinner"></div>
+    <p>در حال بررسی اطلاعات...</p>
 </div>
 
 <!-- پنجره مودال خطا -->
@@ -122,14 +105,27 @@
     </div>
 </div>
 
+<!-- فوتر انیمیشن‌دار با دکمه‌های شبکه‌های اجتماعی -->
+<footer id="main-footer" class="animated-footer">
+    <div class="social-icons">
+        <a href="https://wa.me/93780412583" target="_blank" class="social-btn whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="https://t.me/visa_immigration_vim" target="_blank" class="social-btn telegram" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
+        <a href="mailto:immigration.tehran@tuta.io" class="social-btn email" title="Email"><i class="fa-solid fa-envelope"></i></a>
+        <a href="https://tally.so/r/PdgqXe" target="_blank" class="social-btn contact" title="Contact Form"><i class="fa-solid fa-headset"></i></a>
+    </div>
+    <div class="footer-info">
+        <p>© 2026 <strong>Visa Immigration VIM</strong>. All Rights Reserved.</p>
+    </div>
+</footer>
+
 <script>
-    // لینک اتصال پایدار به گوگل شیت (Web App)
     const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbwJEvFeGKjqMBN7F-olcwgyY2_50mSu1YGlgmEH9KBXDTwjeZ6kzm_juClAdcs2qhZK/exec";
 
+    // ذخیره داده‌های دریافتی برای استفاده در سایدبار
     let globalUserData = [];
     let globalHeaders = [];
 
-    // Slider Logic
+    // Slider Logic (فقط برای صفحه لاگین)
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
     if(slides.length > 0) {
@@ -140,10 +136,9 @@
         }, 5000);
     }
 
-    // Multi-lang Support
     const translations = {
-        en: { dir: "ltr", login_header: "Track Your Case", login_btn: "Search Status", pass_ph: "Passport Number", sec_ph: "Last 5 digits of Phone" },
-        fa: { dir: "rtl", login_header: "پیگیری پرونده ویزا", login_btn: "جستجوی وضعیت", pass_ph: "شماره پاسپورت", sec_ph: "۵ رقم آخر شماره تماس (رمز)" }
+        en: { dir: "ltr", login_header: "Track Your Case", login_btn: "Search Status", pass_ph: "Passport Number", sec_ph: "Last 5 digits of Phone", sb: "Destination Countries" },
+        fa: { dir: "rtl", login_header: "پیگیری پرونده ویزا", login_btn: "جستجوی وضعیت", pass_ph: "شماره پاسپورت", sec_ph: "۵ رقم آخر شماره تماس (رمز)", sb: "کشورهای مقصد / خدمات" }
     };
 
     function changeLanguage(lang) {
@@ -154,6 +149,7 @@
         document.getElementById('loginBtn').innerText = t.login_btn;
         document.getElementById('passport').placeholder = t.pass_ph;
         document.getElementById('password').placeholder = t.sec_ph;
+        if(document.getElementById('sb_title')) document.getElementById('sb_title').innerText = t.sb;
     }
 
     function showError(msg) {
@@ -184,41 +180,28 @@
                 
                 if(data.status === 'success' && data.data.length > 0) {
                     globalUserData = data.data;
-                    globalHeaders = Object.keys(globalUserData[0]);
+                    globalHeaders = Object.keys(data.data[0]);
 
-                    // ۱. حذف کامل تصاویر و بخش اسلایدر در صفحه دشبورد
-                    document.getElementById('visualSection').style.display = 'none';
-                    
-                    // ۲. تنظیم استایل فرم‌سشن برای اشغال کل صفحه
-                    const formSection = document.getElementById('formSection');
-                    formSection.style.flex = '1';
-                    formSection.style.width = '100%';
-                    formSection.style.padding = '20px';
+                    // ۱. مخفی کردن کامل بخش تصاویر و اسلایدر صفحه لاگین
+                    const visualSec = document.getElementById('visualSection');
+                    if(visualSec) visualSec.style.display = 'none';
 
-                    // ۳. پنهان کردن فرم لاگین
+                    // ۲. تبدیل فرم‌سش به حالت دشبورد تمام صفحه با استایل ریسپانسیو
+                    const formSec = document.getElementById('formSection');
+                    formSec.classList.add('dashboard-fullscreen-mode');
+
                     document.getElementById('loginContainer').style.display = 'none';
-
-                    // ۴. نمایش دشبورد
-                    document.getElementById('dashboard').style.display = 'flex';
+                    document.getElementById('dashboard').style.display = 'block';
 
                     // تنظیم نام کاربر در هدر
                     const firstRow = globalUserData[0];
-                    if(firstRow['NAME'] || firstRow['Name']) {
-                        document.getElementById('dashboardTitle').innerText = `خوش آمدید، ${firstRow['NAME'] || firstRow['Name']}`;
+                    if(firstRow['NAME'] || firstRow[globalHeaders[1]]) {
+                        let userName = firstRow['NAME'] ? `${firstRow['NAME']} ${firstRow['LASTNAME'] || ''}` : '';
+                        document.getElementById('dashboardTitle').innerText = `خوش آمدید، ${userName}`;
                     }
 
-                    // بررسی ستون Update Msg (ستون آخر یا ستونی با این نام)
-                    let updateMsgKey = globalHeaders.find(h => h.toLowerCase().includes('update') || h.toLowerCase().includes('msg'));
-                    if(updateMsgKey && firstRow[updateMsgKey]) {
-                        document.getElementById('updateMsgText').innerText = firstRow[updateMsgKey];
-                        document.getElementById('updateMsgBanner').style.display = 'flex';
-                    }
-
-                    // ساخت دکمه‌های سایدبار برای ستون B (کشورها)
-                    buildMiniSidebar(globalUserData, globalHeaders);
-
-                    // نمایش نمای کلی جدول به صورت پیش‌فرض
-                    showGeneralTable();
+                    // ساخت سایدبار کشورها (ستون B مخزن اطلاعات یا ستون دوم)
+                    buildSidebarAndContent();
 
                 } else {
                     showError(data.message || (document.documentElement.lang === 'fa' ? "اطلاعاتی با این مشخصات یافت نشد یا رمز عبور اشتباه است." : "Record not found or incorrect password."));
@@ -231,41 +214,90 @@
             });
     });
 
-    // ساخت مینی سایدبار انیمیشنی برای ستون B (کشورها)
-    function buildMiniSidebar(dataRows, headers) {
-        const container = document.getElementById('countryButtonsContainer');
-        // حفظ دکمه عمومی اول
-        let html = `<button class="nav-btn general-btn active-nav" onclick="showGeneralTable()"><i class="fa-solid fa-table"></i> نمای کلی جدول</button>`;
-        
-        // ستون دوم معمولاً ستون B است (Index 1)
-        const countryKey = headers[1] || 'Country';
+    // ساخت دکمه‌های سایدبار بر اساس ستون دوم (ستون B یا ایندکس 1)
+    function buildSidebarAndContent() {
+        const container = document.getElementById('countryButtonsList');
+        container.innerHTML = '';
 
-        dataRows.forEach((row, index) => {
-            const countryName = row[countryKey] || `مورد ${index + 1}`;
-            // فرض می‌کنیم اگر وضعیت یا فیلدی مثل Status پر باشد ثبت شده (تیک سبز) وگرنه قرمز
-            const isRegistered = row['Status'] || row['STATUS'] || row['status'] ? true : Math.random() > 0.5; // نمونه منطق وضعیت
-            
-            const iconClass = isRegistered ? '<i class="fa-solid fa-circle-check text-green"></i>' : '<i class="fa-solid fa-circle-xmark text-red"></i>';
+        // فرض می‌کنیم ستون دوم (index 1 یا هدر دوم) مربوط به کشور مقصد است
+        const countryHeader = globalHeaders[1] || 'Country';
 
-            html += `<button class="nav-btn country-nav-btn" onclick="showAppFormView(${index}, this)">
-                ${iconClass} <span>${countryName}</span>
-            </button>`;
+        globalUserData.forEach((row, index) => {
+            let countryName = row[countryHeader] || `Record ${index + 1}`;
+            // بررسی وضعیت ثبت نام (مثلا اگر ستونی به نام Status یا ثبت وجود دارد یا بررسی خالی نبودن)
+            let isRegistered = row['STATUS'] ? !String(row['STATUS']).toLowerCase().includes('not') : true; 
+
+            let btn = document.createElement('button');
+            btn.className = 'menu-item';
+            btn.innerHTML = `
+                <span><i class="fa-solid fa-location-dot"></i> ${countryName}</span>
+                <span class="badge-icon ${isRegistered ? 'registered' : 'unregistered'}">
+                    <i class="fa-solid ${isRegistered ? 'fa-check' : 'fa-xmark'}"></i>
+                </span>
+            `;
+            btn.onclick = () => {
+                setActiveMenu(btn);
+                showSingleRecordAsForm(row);
+            };
+            container.appendChild(btn);
         });
 
-        container.innerHTML = html;
+        // پیش‌فرض نمایش رکورد اول به شکل فرم اپلیکیشن
+        if(globalUserData.length > 0) {
+            showSingleRecordAsForm(globalUserData[0]);
+        }
     }
 
-    // نمایش نمای کلی جدول انیمیشنی
-    function showGeneralTable() {
-        setActiveNavButton(0);
-        let tableHTML = '<div class="table-responsive-box animate-fade"><table><tr>';
+    function setActiveMenu(selectedBtn) {
+        document.querySelectorAll('.sidebar-menu .menu-item').forEach(b => b.classList.remove('active-menu'));
+        selectedBtn.classList.add('active-menu');
+    }
+
+    // نمایش اطلاعات یک رکورد شبیه Application Form به همراه کارت پیام به‌روزرسانی بزرگ
+    function showSingleRecordAsForm(row) {
+        document.getElementById('tableWrapper').style.display = 'none';
+        const formView = document.getElementById('applicationFormView');
+        formView.style.display = 'grid';
+
+        // بررسی ستون Update Msg یا مشابه برای نمایش در هدر بزرگ
+        let updateMsgKey = globalHeaders.find(h => h.toUpperCase().includes('UPDATE') || h.toUpperCase().includes('MSG') || h.toUpperCase().includes('MESSAGE'));
+        let updateCard = document.getElementById('updateMsgCard');
+        
+        if (updateMsgKey && row[updateMsgKey]) {
+            document.getElementById('updateMsgText').innerText = row[updateMsgKey];
+            updateCard.style.display = 'flex';
+        } else {
+            updateCard.style.display = 'none';
+        }
+
+        let html = '';
         globalHeaders.forEach(header => {
-            // اگر ستون update msg است، آن را با استایل خیلی قشنگ در هدر متمایز می‌کنیم
-            if(header.toLowerCase().includes('update') || header.toLowerCase().includes('msg')) {
-                tableHTML += `<th class="special-header-th"><i class="fa-solid fa-bullhorn"></i> ${header}</th>`;
-            } else {
-                tableHTML += `<th>${header}</th>`;
-            }
+            if(header === updateMsgKey) return; // پیام در بنر بالا جداگانه نمایش داده می‌شود
+            let val = row[header] !== undefined ? row[header] : '';
+            html += `
+                <div class="form-field-box">
+                    <label>${header}</label>
+                    <div class="form-field-val">${val}</div>
+                </div>
+            `;
+        });
+        formView.innerHTML = html;
+    }
+
+    // نمایش جدول عمومی تمام رکوردها با انیمیشن
+    function showGeneralTable() {
+        document.querySelectorAll('.sidebar-menu .menu-item').forEach(b => b.classList.remove('active-menu'));
+        event.currentTarget.classList.add('active-menu');
+
+        document.getElementById('updateMsgCard').style.display = 'none';
+        document.getElementById('applicationFormView').style.display = 'none';
+        
+        const tableWrapper = document.getElementById('tableWrapper');
+        tableWrapper.style.display = 'block';
+
+        let tableHTML = '<table><tr>';
+        globalHeaders.forEach(header => {
+            tableHTML += `<th>${header}</th>`;
         });
         tableHTML += '</tr>';
 
@@ -276,40 +308,9 @@
             });
             tableHTML += '</tr>';
         });
-        tableHTML += '</table></div>';
+        tableHTML += '</table>';
 
-        document.getElementById('dynamicDisplayArea').innerHTML = tableHTML;
-    }
-
-    // نمایش اطلاعات به سبک Application Form برای هر رکورد/کشور
-    function showAppFormView(index, btnElement) {
-        setActiveNavButton(btnElement);
-        const row = globalUserData[index];
-
-        let formHTML = `<div class="app-form-card animate-fade">
-            <h3><i class="fa-solid fa-file-lines"></i> فرم جزئیات پرونده</h3>
-            <div class="form-grid-items">`;
-
-        globalHeaders.forEach(header => {
-            const val = row[header] !== undefined ? row[header] : '-';
-            formHTML += `
-                <div class="form-item-box">
-                    <span class="form-label">${header}</span>
-                    <span class="form-value">${val}</span>
-                </div>`;
-        });
-
-        formHTML += `</div></div>`;
-        document.getElementById('dynamicDisplayArea').innerHTML = formHTML;
-    }
-
-    function setActiveNavButton(target) {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
-        if(typeof target === 'number') {
-            document.querySelectorAll('.nav-btn')[0].classList.add('active-nav');
-        } else if(target) {
-            target.classList.add('active-nav');
-        }
+        tableWrapper.innerHTML = tableHTML;
     }
 </script>
 </body>
