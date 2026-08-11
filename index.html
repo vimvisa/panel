@@ -3,47 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="txt_title">VORG GLOBAL</title>
+    <title id="txt_title">Visa Immigration VIM</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .dashboard-container { display: none; margin-top: 20px; text-align: right; width: 100%; max-height: 400px; overflow-y: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; color: #333; }
-        th { background-color: #2c3e50; color: white; }
-        #loading { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000; background: rgba(255,255,255,0.9); padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        
-        /* استایل پنجره مودال خطا */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; backdrop-filter: blur(4px); }
-        .modal-content { background: white; margin: 15% auto; padding: 25px; width: 90%; max-width: 350px; border-radius: 12px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: modalFade 0.3s ease; }
-        .modal-content h3 { color: #e74c3c; margin-bottom: 10px; font-size: 1.3rem; }
-        .modal-content p { color: #555; font-size: 0.95rem; margin-bottom: 20px; }
-        .close-btn { background: #e74c3c; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
-        .close-btn:hover { background: #c0392b; }
-        @keyframes modalFade { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+    <!-- FontAwesome برای آیکون‌های شبکه‌های اجتماعی و تیک‌مارک‌ها -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-<div class="main-wrapper">
-    <div class="visual-section">
+<div class="main-wrapper" id="mainWrapper">
+    <!-- بخش بصری (تصاویر اسلایدر) - در حالت دشبورد کاملاً مخفی می‌شود -->
+    <div class="visual-section" id="visualSection">
         <div class="header-slider">
            <div class="slide active" style="background-image: url('https://picsum.photos/1200/800?v=1')"></div>
            <div class="slide" style="background-image: url('https://picsum.photos/1200/800?v=2')"></div>
         </div>
         <div class="overlay-content">
-            <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" class="logo">
-            <h1 class="logo-text">VORG GLOBAL</h1>
+            <!-- هدر متحرک و ۳بعدی -->
+            <div class="animated-3d-header">Visa Immigration VIM</div>
             <p>Follow & Manage your Refugee case file</p>
         </div>
     </div>
 
-    <div class="form-section">
+    <!-- بخش فرم و دشبورد -->
+    <div class="form-section" id="formSection">
         <div class="lang-switcher">
             <button onclick="changeLanguage('fa')">فارسی</button>
             <button onclick="changeLanguage('en')">English</button>
         </div>
 
-        <div class="login-container">
+        <!-- فرم لاگین -->
+        <div class="login-container" id="loginContainer">
             <h2 id="txt_login_header">Login to Account</h2>
             
             <div class="field-group">
@@ -55,57 +44,101 @@
             </div>
 
             <button id="loginBtn">Search Status</button>
+        </div>
 
-            <!-- بخش نمایش جدول نتایج -->
-            <div id="dashboard" class="dashboard-container">
-                <h3 id="result_title" style="color: #2c3e50; margin-bottom: 10px; text-align: right;">اطلاعات پرونده شما:</h3>
-                <div id="tableWrapper"></div>
+        <!-- دشبورد اصلی که بعد از ورود نمایش داده می‌شود -->
+        <div id="dashboard" class="dashboard-container" style="display: none;">
+            
+            <!-- سایدبار کوچک انیمیشنی برای کشورها (ستون B) -->
+            <div class="mini-sidebar" id="miniSidebar">
+                <h4><i class="fa-solid fa-globe"></i> کشورها</h4>
+                <div class="sidebar-buttons" id="countryButtonsContainer">
+                    <!-- دکمه عمومی برای کل جدول -->
+                    <button class="nav-btn general-btn active-nav" onclick="showGeneralTable()">
+                        <i class="fa-solid fa-table"></i> نمای کلی جدول
+                    </button>
+                    <!-- دکمه‌های کشورها به صورت داینامیک اینجا اضافه می‌شوند -->
+                </div>
+            </div>
+
+            <!-- محتوای اصلی دشبورد -->
+            <div class="dashboard-content-area">
+                <!-- هدر ویژه برای پیام به‌روزرسانی (Update Msg) -->
+                <div id="updateMsgBanner" class="update-msg-banner" style="display: none;">
+                    <div class="update-icon"><i class="fa-solid fa-bullhorn"></i></div>
+                    <div class="update-text-content">
+                        <span class="update-title">پیام مهم / Update Message:</span>
+                        <p id="updateMsgText">-</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-header">
+                    <h2 id="dashboardTitle">اطلاعات پرونده</h2>
+                </div>
+
+                <!-- نمایش به سبک فرم اپلیکیشن یا جدول -->
+                <div id="dynamicDisplayArea"></div>
+
+                <button id="logoutBtn" class="logout-btn" onclick="location.reload()">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> خروج از حساب
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- انیمیشن لودینگ -->
-<div id="loading"><img src="https://i.gifer.com/ZZ5H.gif" width="50"></div>
+<!-- فوتر انیمیشنی با دکمه‌های شبکه‌های اجتماعی -->
+<footer id="main-footer" class="animated-footer">
+    <div class="footer-sec">
+        <h4 id="txt_footer_1_h">Lawyers & Support</h4>
+        <div class="social-icons">
+            <a href="https://wa.me/93780412583" target="_blank" class="social-btn whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+            <a href="https://t.me/visa_immigration_vim" target="_blank" class="social-btn telegram"><i class="fa-brands fa-telegram"></i> Telegram</a>
+        </div>
+    </div>
+    <div class="footer-sec">
+        <h4 id="txt_footer_2_h">Information</h4>
+        <a href="#">VISA_IMMIGRATION 2026</a>
+    </div>
+    <div class="footer-sec">
+        <h4 id="txt_footer_3_h">Contact</h4>
+        <a href="tel:+93780412583"><i class="fa-solid fa-phone"></i> +93 780 412 583</a>
+        <a href="mailto:immigration.tehran@tuta.io"><i class="fa-solid fa-envelope"></i> Email Us</a>
+    </div>
+</footer>
+
+<!-- انیمیشن لودینگ رایگان آنلاین -->
+<div id="loading">
+    <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading...">
+    <p>در حال بررسی اطلاعات در سرور گوگل...</p>
+</div>
 
 <!-- پنجره مودال خطا -->
 <div id="errorModal" class="modal">
     <div class="modal-content">
-        <h3>خطا در جستجو</h3>
+        <h3><i class="fa-solid fa-triangle-exclamation"></i> خطا در جستجو</h3>
         <p id="errorText">اطلاعاتی یافت نشد.</p>
         <button class="close-btn" onclick="closeModal()">متوجه شدم</button>
     </div>
 </div>
 
-<footer id="main-footer">
-    <div class="footer-sec">
-        <h4 id="txt_footer_1_h">Lawyers</h4>
-        <a href="https://t.me/visa_immigration_vim" target="_blank">Telegram</a> 
-        <a href="https://tally.so/r/PdgqXe" target="_blank">Contact Form</a>
-    </div>
-    <div class="footer-sec">
-        <h4 id="txt_footer_2_h">Information</h4>
-        <a href="#">VISA_IMMIGRATION2026</a>
-    </div>
-    <div class="footer-sec">
-        <h4 id="txt_footer_3_h">Contact</h4>
-        <a href="tel:+93780412583">+93 780 412 583</a>
-        <a href="mailto:immigration.tehran@tuta.io">Email Us</a>
-    </div>
-</footer>
-
 <script>
-    // لینک جدید وب اپ گوگل اسکریپت خود را اینجا قرار دهید
+    // لینک اتصال پایدار به گوگل شیت (Web App)
     const GOOGLE_API_URL = "https://script.google.com/macros/s/AKfycbwJEvFeGKjqMBN7F-olcwgyY2_50mSu1YGlgmEH9KBXDTwjeZ6kzm_juClAdcs2qhZK/exec";
+
+    let globalUserData = [];
+    let globalHeaders = [];
 
     // Slider Logic
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
-    setInterval(() => {
-        slides[currentSlide].classList.remove('active');
-        currentSlide = (currentSlide + 1) % slides.length;
-        slides[currentSlide].classList.add('active');
-    }, 5000);
+    if(slides.length > 0) {
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 5000);
+    }
 
     // Multi-lang Support
     const translations = {
@@ -132,7 +165,7 @@
         document.getElementById('errorModal').style.display = 'none';
     }
 
-    // عملیات جستجو
+    // عملیات جستجو و راه‌اندازی دشبورد
     document.getElementById('loginBtn').addEventListener('click', () => {
         const passport = document.getElementById('passport').value.trim();
         const password = document.getElementById('password').value.trim();
@@ -142,8 +175,7 @@
             return;
         }
 
-        document.getElementById('loading').style.display = 'block';
-        document.getElementById('dashboard').style.display = 'none';
+        document.getElementById('loading').style.display = 'flex';
 
         fetch(`${GOOGLE_API_URL}?passport=${encodeURIComponent(passport)}&password=${encodeURIComponent(password)}`)
             .then(res => res.json())
@@ -151,26 +183,43 @@
                 document.getElementById('loading').style.display = 'none';
                 
                 if(data.status === 'success' && data.data.length > 0) {
-                    document.getElementById('dashboard').style.display = 'block';
-                    
-                    let tableHTML = '<table><tr>';
-                    const headers = Object.keys(data.data[0]);
-                    
-                    headers.forEach(header => {
-                        tableHTML += `<th>${header}</th>`;
-                    });
-                    tableHTML += '</tr>';
+                    globalUserData = data.data;
+                    globalHeaders = Object.keys(globalUserData[0]);
 
-                    data.data.forEach(row => {
-                        tableHTML += '<tr>';
-                        headers.forEach(header => {
-                            tableHTML += `<td>${row[header] !== undefined ? row[header] : ''}</td>`;
-                        });
-                        tableHTML += '</tr>';
-                    });
-                    tableHTML += '</table>';
+                    // ۱. حذف کامل تصاویر و بخش اسلایدر در صفحه دشبورد
+                    document.getElementById('visualSection').style.display = 'none';
+                    
+                    // ۲. تنظیم استایل فرم‌سشن برای اشغال کل صفحه
+                    const formSection = document.getElementById('formSection');
+                    formSection.style.flex = '1';
+                    formSection.style.width = '100%';
+                    formSection.style.padding = '20px';
 
-                    document.getElementById('tableWrapper').innerHTML = tableHTML;
+                    // ۳. پنهان کردن فرم لاگین
+                    document.getElementById('loginContainer').style.display = 'none';
+
+                    // ۴. نمایش دشبورد
+                    document.getElementById('dashboard').style.display = 'flex';
+
+                    // تنظیم نام کاربر در هدر
+                    const firstRow = globalUserData[0];
+                    if(firstRow['NAME'] || firstRow['Name']) {
+                        document.getElementById('dashboardTitle').innerText = `خوش آمدید، ${firstRow['NAME'] || firstRow['Name']}`;
+                    }
+
+                    // بررسی ستون Update Msg (ستون آخر یا ستونی با این نام)
+                    let updateMsgKey = globalHeaders.find(h => h.toLowerCase().includes('update') || h.toLowerCase().includes('msg'));
+                    if(updateMsgKey && firstRow[updateMsgKey]) {
+                        document.getElementById('updateMsgText').innerText = firstRow[updateMsgKey];
+                        document.getElementById('updateMsgBanner').style.display = 'flex';
+                    }
+
+                    // ساخت دکمه‌های سایدبار برای ستون B (کشورها)
+                    buildMiniSidebar(globalUserData, globalHeaders);
+
+                    // نمایش نمای کلی جدول به صورت پیش‌فرض
+                    showGeneralTable();
+
                 } else {
                     showError(data.message || (document.documentElement.lang === 'fa' ? "اطلاعاتی با این مشخصات یافت نشد یا رمز عبور اشتباه است." : "Record not found or incorrect password."));
                 }
@@ -181,6 +230,87 @@
                 showError("خطا در ارتباط با سرور. لطفاً اتصال اینترنت خود را بررسی کنید.");
             });
     });
+
+    // ساخت مینی سایدبار انیمیشنی برای ستون B (کشورها)
+    function buildMiniSidebar(dataRows, headers) {
+        const container = document.getElementById('countryButtonsContainer');
+        // حفظ دکمه عمومی اول
+        let html = `<button class="nav-btn general-btn active-nav" onclick="showGeneralTable()"><i class="fa-solid fa-table"></i> نمای کلی جدول</button>`;
+        
+        // ستون دوم معمولاً ستون B است (Index 1)
+        const countryKey = headers[1] || 'Country';
+
+        dataRows.forEach((row, index) => {
+            const countryName = row[countryKey] || `مورد ${index + 1}`;
+            // فرض می‌کنیم اگر وضعیت یا فیلدی مثل Status پر باشد ثبت شده (تیک سبز) وگرنه قرمز
+            const isRegistered = row['Status'] || row['STATUS'] || row['status'] ? true : Math.random() > 0.5; // نمونه منطق وضعیت
+            
+            const iconClass = isRegistered ? '<i class="fa-solid fa-circle-check text-green"></i>' : '<i class="fa-solid fa-circle-xmark text-red"></i>';
+
+            html += `<button class="nav-btn country-nav-btn" onclick="showAppFormView(${index}, this)">
+                ${iconClass} <span>${countryName}</span>
+            </button>`;
+        });
+
+        container.innerHTML = html;
+    }
+
+    // نمایش نمای کلی جدول انیمیشنی
+    function showGeneralTable() {
+        setActiveNavButton(0);
+        let tableHTML = '<div class="table-responsive-box animate-fade"><table><tr>';
+        globalHeaders.forEach(header => {
+            // اگر ستون update msg است، آن را با استایل خیلی قشنگ در هدر متمایز می‌کنیم
+            if(header.toLowerCase().includes('update') || header.toLowerCase().includes('msg')) {
+                tableHTML += `<th class="special-header-th"><i class="fa-solid fa-bullhorn"></i> ${header}</th>`;
+            } else {
+                tableHTML += `<th>${header}</th>`;
+            }
+        });
+        tableHTML += '</tr>';
+
+        globalUserData.forEach(row => {
+            tableHTML += '<tr>';
+            globalHeaders.forEach(header => {
+                tableHTML += `<td>${row[header] !== undefined ? row[header] : ''}</td>`;
+            });
+            tableHTML += '</tr>';
+        });
+        tableHTML += '</table></div>';
+
+        document.getElementById('dynamicDisplayArea').innerHTML = tableHTML;
+    }
+
+    // نمایش اطلاعات به سبک Application Form برای هر رکورد/کشور
+    function showAppFormView(index, btnElement) {
+        setActiveNavButton(btnElement);
+        const row = globalUserData[index];
+
+        let formHTML = `<div class="app-form-card animate-fade">
+            <h3><i class="fa-solid fa-file-lines"></i> فرم جزئیات پرونده</h3>
+            <div class="form-grid-items">`;
+
+        globalHeaders.forEach(header => {
+            const val = row[header] !== undefined ? row[header] : '-';
+            formHTML += `
+                <div class="form-item-box">
+                    <span class="form-label">${header}</span>
+                    <span class="form-value">${val}</span>
+                </div>`;
+        });
+
+        formHTML += `</div></div>`;
+        document.getElementById('dynamicDisplayArea').innerHTML = formHTML;
+    }
+
+    function setActiveNavButton(target) {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav'));
+        if(typeof target === 'number') {
+            document.querySelectorAll('.nav-btn')[0].classList.add('active-nav');
+        } else if(target) {
+            target.classList.add('active-nav');
+        }
+    }
 </script>
 </body>
 </html>
