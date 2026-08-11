@@ -20,7 +20,6 @@ body, html {
     min-height: 100vh;
 }
 
-/* بخش تصویر و اسلایدر در حالت لاگین */
 .visual-section {
     flex: 1.2;
     position: relative;
@@ -58,7 +57,6 @@ body, html {
 
 .logo { width: 120px; filter: brightness(0) invert(1); margin-bottom: 15px; }
 
-/* هدر ۳بعدی و متحرک نام سایت */
 .animated-3d-title {
     font-size: 2.5rem;
     font-weight: 800;
@@ -81,7 +79,6 @@ body, html {
     to { filter: drop-shadow(0 0 8px rgba(144,202,249,0.9)); }
 }
 
-/* بخش فرم و دشبورد */
 .form-section {
     flex: 0.8;
     background: var(--bg-light);
@@ -105,20 +102,6 @@ body, html {
     box-sizing: border-box;
 }
 
-.lang-switcher {
-    position: absolute; top: 15px; left: 15px;
-    display: flex; gap: 8px; z-index: 10;
-}
-
-.lang-switcher button {
-    background: rgba(255,255,255,0.9); border: 1px solid #cbd5e1;
-    padding: 6px 14px; border-radius: 20px; cursor: pointer;
-    font-size: 11px; font-weight: 600; transition: 0.3s;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.lang-switcher button:hover { background: var(--primary); color: white; border-color: var(--primary); }
-
 .login-container {
     width: 100%;
     max-width: 380px;
@@ -136,15 +119,21 @@ input {
 
 input:focus { border-color: var(--primary); background: #fff; outline: none; box-shadow: 0 0 10px rgba(13,71,161,0.1); }
 
+/* دکمه جستجو غیرفعال در حالت اولیه */
 button#loginBtn {
-    width: 100%; padding: 16px; background: var(--primary);
-    color: white; border: none; border-radius: 8px;
-    font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.4s;
+    width: 100%; padding: 16px; background: #cbd5e1;
+    color: #64748b; border: none; border-radius: 8px;
+    font-weight: bold; cursor: not-allowed; font-size: 16px; transition: 0.4s;
 }
 
-button#loginBtn:hover { background: var(--primary-dark); }
+button#loginBtn.active-btn {
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+}
+button#loginBtn.active-btn:hover { background: var(--primary-dark); }
 
-/* ساختار دشبورد */
+/* هدر دشبورد */
 .dashboard-container {
     width: 100%;
     animation: fadeIn 0.5s ease-in-out;
@@ -153,7 +142,6 @@ button#loginBtn:hover { background: var(--primary-dark); }
     flex: 1;
 }
 
-/* هدر دشبورد همراه با لوگو در سمت چپ و ظاهر اپلیکیشنی */
 .dashboard-top-header {
     display: flex;
     justify-content: space-between;
@@ -161,7 +149,12 @@ button#loginBtn:hover { background: var(--primary-dark); }
     margin-bottom: 20px;
     border-bottom: 2px solid #edf2f7;
     padding-bottom: 12px;
-    position: relative;
+}
+
+.header-left-side {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .header-logo-left {
@@ -172,12 +165,24 @@ button#loginBtn:hover { background: var(--primary-dark); }
     background: #fff;
     padding: 3px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-    order: -1;
 }
+
+.lang-switcher {
+    display: flex; gap: 6px; z-index: 10;
+}
+
+.lang-switcher button {
+    background: #f1f5f9; border: 1px solid #cbd5e1;
+    padding: 6px 12px; border-radius: 20px; cursor: pointer;
+    font-size: 11px; font-weight: 600; transition: 0.3s;
+}
+
+.lang-switcher button:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
 .header-title-wrapper {
     flex: 1;
-    text-align: center;
+    text-align: right;
+    padding-left: 15px;
 }
 
 .dashboard-top-header .animated-3d-title {
@@ -201,7 +206,6 @@ button#loginBtn:hover { background: var(--primary-dark); }
     flex: 1;
 }
 
-/* سایدبار دسکتاپ */
 .sidebar-menu {
     width: 290px;
     min-width: 270px;
@@ -259,7 +263,6 @@ button#loginBtn:hover { background: var(--primary-dark); }
     box-shadow: 0 4px 12px rgba(13,71,161,0.3);
 }
 
-/* تیک‌مارک‌ها */
 .badge-icon {
     width: 22px; height: 22px;
     border-radius: 50%;
@@ -276,7 +279,6 @@ button#loginBtn:hover { background: var(--primary-dark); }
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(198, 40, 40, 0); }
 }
 
-/* محتوای اصلی */
 .main-display-area {
     flex: 1;
     display: flex;
@@ -286,7 +288,6 @@ button#loginBtn:hover { background: var(--primary-dark); }
     width: 100%;
 }
 
-/* کادر پیام به‌روزرسانی */
 .update-msg-banner {
     background: linear-gradient(135deg, #fffbeb, #fef3c7);
     border-left: 6px solid #d97706;
@@ -302,7 +303,6 @@ button#loginBtn:hover { background: var(--primary-dark); }
 .update-msg-body h4 { margin: 0 0 3px 0; color: #b45309; font-size: 1.05rem; font-weight: 700; }
 .update-msg-body p { margin: 0; color: #451a03; font-size: 0.95rem; line-height: 1.4; }
 
-/* نمایش اطلاعات فرم‌مانند */
 .app-form-view {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -337,7 +337,6 @@ button#loginBtn:hover { background: var(--primary-dark); }
     word-break: break-word;
 }
 
-/* جدول عمومی داخل پنجره کاملاً فیکس و اسکرول‌خور بدون خروج از فریم */
 .table-responsive {
     width: 100%;
     max-width: 100%;
@@ -395,13 +394,11 @@ tr:hover { background-color: #f8fafc; }
 
 .logout-btn:hover { background: #a71d1d; transform: translateY(-2px); }
 
-/* مودال خطا */
 .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; backdrop-filter: blur(4px); }
 .modal-content { background: white; margin: 15% auto; padding: 25px; width: 90%; max-width: 350px; border-radius: 12px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .modal-content h3 { color: var(--error); margin-bottom: 10px; font-size: 1.3rem; }
 .close-btn { background: var(--error); color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; }
 
-/* فوتر */
 footer.animated-footer {
     background: #111;
     color: #aaa;
@@ -442,7 +439,6 @@ footer.animated-footer {
 
 .footer-info p { margin: 0; font-size: 0.78rem; color: #777; }
 
-/* لودینگ */
 #loading {
     display: none;
     position: fixed;
@@ -470,17 +466,31 @@ footer.animated-footer {
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* ==========================================
-   طراحی فوق‌العاده منظم ریسپانسیو موبایل (Grid View 2 تایی برای کشورها)
+   تنظیمات اختصاصی موبایل (بدون تاثیر روی دسکتاپ)
    ========================================== */
 @media (max-width: 900px) {
     body, html { overflow-x: hidden; }
     .main-wrapper { flex-direction: column; width: 100%; overflow: hidden; }
-    .visual-section { height: 180px; flex: none; }
-    .form-section { flex: none; padding: 15px 8px; width: 100%; box-sizing: border-box; }
+    .visual-section { height: 150px; flex: none; }
+    .form-section { flex: none; padding: 15px 12px; width: 100%; box-sizing: border-box; }
+    
+    .login-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 5px;
+        box-sizing: border-box;
+    }
+
+    h2#txt_login_header {
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
     .dashboard-fullscreen-mode { padding: 10px 6px !important; width: 100% !important; box-sizing: border-box; }
     .dashboard-content-layout { flex-direction: column; width: 100%; gap: 12px; }
     
-    /* تبدیل سایدبار کشورها به سیستم گرید ۲ تایی در هر ردیف کاملاً منظم */
+    /* گرید ۲ تایی دکمه‌های کشورها در موبایل */
     .sidebar-menu {
         width: 100%;
         display: grid;
@@ -498,7 +508,6 @@ footer.animated-footer {
         font-size: 0.9rem;
     }
 
-    /* گزینه نمایش عمومی تمام پرونده‌ها در بالای گرید، کل عرض را می‌گیرد */
     .sidebar-menu .menu-item:first-of-type {
         grid-column: span 2;
     }
@@ -509,12 +518,20 @@ footer.animated-footer {
         border-radius: 8px;
     }
 
-    /* تنظیم هدر در موبایل برای حفظ کادر و زیبایی */
+    /* تنظیم هدر در موبایل (چیدمان روان لوگو، زبان و عنوان) */
     .dashboard-top-header {
-        flex-direction: row;
-        align-items: center;
-        padding-bottom: 10px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding-bottom: 12px;
         margin-bottom: 15px;
+    }
+
+    .header-left-side {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
     }
 
     .header-logo-left {
@@ -522,8 +539,13 @@ footer.animated-footer {
         height: 38px;
     }
 
+    .header-title-wrapper {
+        text-align: center;
+        padding-left: 0;
+    }
+
     .dashboard-top-header .animated-3d-title {
-        font-size: 1.3rem;
+        font-size: 1.25rem;
     }
 
     .user-welcome {
@@ -536,9 +558,26 @@ footer.animated-footer {
         overflow: hidden;
     }
 
-    .app-form-view { grid-template-columns: 1fr; padding: 12px; }
+    /* گرید فرم اطلاعات در موبایل */
+    .app-form-view { 
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px; 
+        padding: 10px; 
+    }
     
-    /* فیکس کامل جدول عمومی در موبایل بدون خروج از فریم صفحه */
+    .form-field-box {
+        padding: 10px;
+    }
+
+    .form-field-box label {
+        font-size: 0.7rem;
+    }
+
+    .form-field-val {
+        font-size: 0.88rem;
+    }
+
     .table-responsive {
         max-height: 350px;
         width: 100%;
