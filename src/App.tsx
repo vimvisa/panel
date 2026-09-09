@@ -636,9 +636,8 @@ function App() {
     globalHeaders.filter(h => {
       if (h.toUpperCase().includes('NO')) return false;
       if (h === reportKey || h === profileImageKey || h === userMsgKey || h === updateMsgKey) return false;
-      if (!activeRecord) return false;
-      return String(activeRecord[h] ?? '').trim() !== '';
-    }), [globalHeaders, reportKey, profileImageKey, userMsgKey, updateMsgKey, activeRecord]);
+      return true;
+    }), [globalHeaders, reportKey, profileImageKey, userMsgKey, updateMsgKey]);
 
   const appliedCount = useMemo(() => countries.filter(c => {
     const sJ = statusKey ? String(c.record[statusKey] || '').trim() : '';
@@ -709,11 +708,7 @@ function App() {
 
   function loadRecords(rows: RecordData[]) {
     setGlobalUserData(rows);
-
-    // همه ستون‌های موجود در تمام ردیف‌ها را جمع‌آوری می‌کنیم.
-    // بنابراین اگر ستون جدیدی به Google Sheet اضافه شود و در هر ردیفی مقدار داشته باشد،
-    // حتی اگر ردیف اول آن ستون خالی باشد، عنوان ستون نیز شناسایی خواهد شد.
-    const headers = Array.from(new Set(rows.flatMap(row => Object.keys(row))));
+    const headers = Object.keys(rows[0]);
     setGlobalHeaders(headers);
 
     const cKey = getColKey(headers, 1) || headers.find(h => h.toUpperCase().includes('COUNTRY')) || 'Country';
