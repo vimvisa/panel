@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VIM | Case Update</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+    --primary:#123c69;
+    --primary-dark:#0b2c4e;
+    --gold:#c9a227;
+    --bg:#f1f5f9;
+    --card:#fff;
+    --text:#172033;
+    --muted:#64748b;
+    --border:#dbe3ec;
+    --success:#16a34a;
+    --danger:#b91c1c;
+    --shadow:0 10px 30px rgba(0,0,0,.07);
+}
+
+html,body{min-height:100%}
+
+body{
+    margin:0;
+    background:var(--bg);
+    font-family:Tahoma,Arial,sans-serif;
+    color:var(--text);
+}
+
+button,input,textarea{
+    font-family:inherit;
+}
+
+button{
+    border:0;
+    border-radius:12px;
+    padding:13px 20px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.hidden{display:none!important}
+
+/* =========================
+   PASSWORD GATE
+========================= */
+#passwordGate{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:
+        radial-gradient(circle at 20% 10%,rgba(201,162,39,.15),transparent 30%),
+        linear-gradient(135deg,#0b2945,#173f67 55%,#0b2945);
+}
+
+.password-card{
+    width:min(430px,94vw);
+    background:#fff;
+    border-radius:24px;
+    padding:34px 28px 28px;
+    box-shadow:0 25px 70px rgba(0,0,0,.25);
+    text-align:center;
+}
+
+.password-logo{
+    width:82px;
+    height:82px;
+    object-fit:contain;
+    margin:0 auto 15px;
+}
+
+.password-title{
+    margin:0;
+    color:var(--primary);
+    font-size:25px;
+    font-weight:900;
+}
+
+.password-subtitle{
+    margin:7px 0 24px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.8;
+}
+
+.password-input{
+    width:100%;
+    height:50px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:0 15px;
+    outline:none;
+    text-align:center;
+    font-size:15px;
+    letter-spacing:2px;
+}
+
+.password-input:focus{
+    border-color:#5b83a8;
+    box-shadow:0 0 0 3px rgba(18,60,105,.10);
+}
+
+.password-button{
+    width:100%;
+    margin-top:12px;
+    background:linear-gradient(135deg,var(--primary),#285d8f);
+    color:#fff;
+}
+
+.password-error{
+    display:none;
+    margin-top:12px;
+    padding:10px;
+    border-radius:10px;
+    background:#fee2e2;
+    color:#991b1b;
+    font-size:12px;
+}
+
+.password-error.show{display:block}
+
+/* =========================
+   MAIN
+========================= */
+.container{
+    width:min(1200px,94%);
+    margin:25px auto 40px;
+}
+
+.header{
+    background:white;
+    padding:18px 20px;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+}
+
+.logo{
+    width:60px;
+    height:60px;
+    object-fit:contain;
+}
+
+.title-wrap{
+    min-width:0;
+}
+
+.title{
+    font-size:24px;
+    font-weight:900;
+    color:var(--primary);
+}
+
+.subtitle{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:4px;
+}
+
+.header-spacer{
+    margin-right:auto;
+}
+
+.lock-button{
+    background:#eef3f8;
+    color:var(--primary);
+    padding:10px 14px;
+}
+
+/* =========================
+   SEARCH
+========================= */
+.search{
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+}
+
+.search input{
+    flex:1;
+    min-width:0;
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:15px;
+    font-size:15px;
+    outline:none;
+}
+
+.search input:focus{
+    border-color:#5b83a8;
+    box-shadow:0 0 0 3px rgba(18,60,105,.08);
+}
+
+.search button{
+    background:#123c69;
+    color:white;
+    min-width:120px;
+}
+
+/* =========================
+   MESSAGE
+========================= */
+.message{
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+    display:none;
+    line-height:1.8;
+    font-size:13px;
+}
+
+.success{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.error{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.info{
+    background:#e0f2fe;
+    color:#075985;
+}
+
+/* =========================
+   RESULTS
+========================= */
+.results{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+    gap:15px;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+}
+
+.card-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding-bottom:14px;
+    margin-bottom:15px;
+    border-bottom:1px solid #edf1f5;
+}
+
+.card-title{
+    margin:0;
+    color:var(--primary);
+    font-size:18px;
+    font-weight:900;
+    word-break:break-word;
+}
+
+.card-meta{
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.7;
+    text-align:left;
+    direction:ltr;
+}
+
+.field{
+    margin:12px 0;
+}
+
+.field label{
+    display:block;
+    font-size:12px;
+    color:#475569;
+    margin-bottom:5px;
+    font-weight:800;
+}
+
+.field .column-name{
+    color:#94a3b8;
+    font-size:9px;
+    font-weight:normal;
+    margin-right:5px;
+}
+
+.field input,
+.field textarea,
+.field select{
+    width:100%;
+    border:1px solid #d9e1e9;
+    border-radius:10px;
+    padding:11px;
+    background:#fff;
+    color:var(--text);
+    outline:none;
+    font-size:13px;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+    border-color:#5b83a8;
+    box-shadow:0 0 0 3px rgba(18,60,105,.08);
+}
+
+.field textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
+.field.readonly input{
+    background:#f8fafc;
+    color:#64748b;
+}
+
+.new-field{
+    border-right:3px solid var(--gold);
+    padding-right:10px;
+}
+
+.empty-value{
+    color:#94a3b8;
+}
+
+.save{
+    width:100%;
+    background:#16a34a;
+    color:white;
+    margin-top:15px;
+}
+
+.save:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+}
+
+.refresh-columns{
+    width:100%;
+    margin-top:8px;
+    background:#eef3f8;
+    color:var(--primary);
+}
+
+.empty-results{
+    grid-column:1/-1;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media(max-width:700px){
+    .container{
+        width:94%;
+        margin:15px auto 30px;
+    }
+
+    .header{
+        padding:15px;
+        border-radius:16px;
+    }
+
+    .logo{
+        width:48px;
+        height:48px;
+    }
+
+    .title{
+        font-size:18px;
+    }
+
+    .subtitle{
+        font-size:9px;
+    }
+
+    .lock-button{
+        font-size:10px;
+        padding:9px 10px;
+    }
+
+    .search{
+        flex-direction:column;
+        padding:15px;
+    }
+
+    .search button{
+        width:100%;
+    }
+
+    .results{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        padding:16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     PASSWORD
+========================= -->
+<section id="passwordGate">
+
+    <div class="password-card">
+
+        <img src="logo.png" class="password-logo" alt="VIM">
+
+        <h1 class="password-title">
+            VIM Case Update
+        </h1>
+
+        <div class="password-subtitle">
+            برای ورود به صفحه مدیریت و به‌روزرسانی پرونده‌ها، رمز عبور را وارد کنید.
+        </div>
+
+        <input
+            id="accessPassword"
+            class="password-input"
+            type="password"
+            autocomplete="off"
+            placeholder="رمز عبور"
+            onkeydown="if(event.key==='Enter') unlockPage()"
+        >
+
+        <button
+            class="password-button"
+            onclick="unlockPage()"
+        >
+            ورود به صفحه
+        </button>
+
+        <div
+            id="passwordError"
+            class="password-error"
+        >
+            رمز عبور نادرست است.
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     MAIN PAGE
+========================= -->
+<section id="mainPage" class="hidden">
+
+<div class="container">
+
+    <div class="header">
+
+        <img
+            src="logo.png"
+            class="logo"
+            alt="VIM"
+        >
+
+        <div class="title-wrap">
+
+            <div class="title">
+                VIM Case Update
+            </div>
+
+            <div class="subtitle">
+                سیستم جستجو، نمایش و به‌روزرسانی اطلاعات پرونده‌ها
+            </div>
+
+        </div>
+
+        <div class="header-spacer"></div>
+
+        <button
+            class="lock-button"
+            onclick="lockPage()"
+            title="قفل کردن صفحه"
+        >
+            🔒 خروج
+        </button>
+
+    </div>
+
+
+    <div class="search">
+
+        <input
+            id="query"
+            placeholder="شماره پاسپورت یا شماره پرونده"
+            autocomplete="off"
+            onkeydown="if(event.key==='Enter') searchCases()"
+        >
+
+        <button onclick="searchCases()">
+            جستجو
+        </button>
+
+    </div>
+
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+    <div
+        id="results"
+        class="results"
+    ></div>
+
+</div>
+
+</section>
+
+
+<script>
+
+/* =========================================================
+   VIM CASE UPDATE
+   ========================================================= */
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxBuJiCxMmHZgWsP0QuCAyJDoYV_jkucX5aAAb6FjHgdTUSzi79kBSHBMAirVGtpyustA/exec";
+
+/*
+   توجه:
+   این رمز در سمت کاربر قرار دارد و برای کنترل ورود ظاهری صفحه است.
+   برای امنیت واقعی باید احراز هویت در Google Apps Script نیز انجام شود.
+*/
+const PAGE_PASSWORD = "farhad1212";
+
+let foundCases = [];
+let availableHeaders = [];
+let unlocked = false;
+
+
+/* =========================================================
+   PASSWORD
+   ========================================================= */
+
+function unlockPage(){
+
+    const input =
+        document.getElementById("accessPassword");
+
+    const error =
+        document.getElementById("passwordError");
+
+    if(input.value === PAGE_PASSWORD){
+
+        unlocked = true;
+
+        sessionStorage.setItem(
+            "vim_case_update_access",
+            "1"
+        );
+
+        error.classList.remove("show");
+
+        document
+            .getElementById("passwordGate")
+            .classList.add("hidden");
+
+        document
+            .getElementById("mainPage")
+            .classList.remove("hidden");
+
+        input.value = "";
+
+    }else{
+
+        error.classList.add("show");
+
+        input.focus();
+        input.select();
+
+    }
+}
+
+
+function lockPage(){
+
+    unlocked = false;
+
+    sessionStorage.removeItem(
+        "vim_case_update_access"
+    );
+
+    foundCases = [];
+    availableHeaders = [];
+
+    document.getElementById("results").innerHTML = "";
+
+    document
+        .getElementById("mainPage")
+        .classList.add("hidden");
+
+    document
+        .getElementById("passwordGate")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("accessPassword")
+        .focus();
+
+}
+
+
+function initializeAccess(){
+
+    const hasAccess =
+        sessionStorage.getItem(
+            "vim_case_update_access"
+        ) === "1";
+
+    if(hasAccess){
+
+        unlocked = true;
+
+        document
+            .getElementById("passwordGate")
+            .classList.add("hidden");
+
+        document
+            .getElementById("mainPage")
+            .classList.remove("hidden");
+
+    }else{
+
+        document
+            .getElementById("accessPassword")
+            .focus();
+
+    }
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+async function searchCases(){
+
+    if(!unlocked){
+        return;
+    }
+
+    const query =
+        document
+        .getElementById("query")
+        .value
+        .trim();
+
+    if(!query){
+
+        showMessage(
+            "لطفاً شماره پاسپورت یا شماره پرونده را وارد کنید.",
+            "error"
+        );
+
+        return;
+    }
+
+    showMessage(
+        "در حال جستجوی پرونده...",
+        "info"
+    );
+
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL +
+                "?action=search&query=" +
+                encodeURIComponent(query),
+                {
+                    method:"GET",
+                    cache:"no-store"
+                }
+            );
+
+        const data =
+            await response.json();
+
+
+        if(!data.success){
+
+            showMessage(
+                data.message ||
+                "جستجو ناموفق بود.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        /*
+           اگر Apps Script آرایه headers را برگرداند،
+           تمام ستون‌های جدید Sheet نیز در رابط کاربری
+           قابل نمایش خواهند بود.
+        */
+        if(Array.isArray(data.headers)){
+
+            availableHeaders =
+                normalizeHeaders(data.headers);
+
+        }else{
+
+            availableHeaders = [];
+
+        }
+
+
+        foundCases =
+            Array.isArray(data.cases)
+            ? data.cases
+            : [];
+
+
+        /*
+           هدرهای موجود در خود پرونده‌ها نیز اضافه می‌شوند.
+           بنابراین حتی اگر ستون جدید در پاسخ headers نباشد،
+           چنانچه Apps Script آن را در case برگرداند،
+           این صفحه آن را خودکار می‌شناسد.
+        */
+        availableHeaders =
+            collectAllHeaders(
+                foundCases,
+                availableHeaders
+            );
+
+
+        /*
+           اگر backend از headers پشتیبانی کند، ستون‌های جدید
+           که مقدار خالی دارند نیز قابل نمایش می‌شوند.
+        */
+        if(
+            !availableHeaders.length &&
+            foundCases.length
+        ){
+
+            availableHeaders =
+                collectAllHeaders(
+                    foundCases,
+                    []
+                );
+
+        }
+
+
+        renderResults();
+
+
+        if(foundCases.length){
+
+            hideMessage();
+
+        }else{
+
+            showMessage(
+                "هیچ پرونده‌ای پیدا نشد.",
+                "info"
+            );
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "ارتباط با Google Sheet برقرار نشد.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GET HEADERS
+   ========================================================= */
+
+/*
+   این تابع یک بار تلاش می‌کند هدرهای واقعی Sheet را بگیرد.
+   اگر Apps Script فعلی action=getHeaders را پشتیبانی نکند،
+   خطا نادیده گرفته می‌شود و سیستم از headers/cases موجود
+   استفاده می‌کند.
+*/
+async function fetchSheetHeaders(){
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL +
+                "?action=getHeaders",
+                {
+                    method:"GET",
+                    cache:"no-store"
+                }
+            );
+
+        if(!response.ok){
+            return [];
+        }
+
+        const data =
+            await response.json();
+
+        if(
+            data &&
+            data.success &&
+            Array.isArray(data.headers)
+        ){
+
+            return normalizeHeaders(data.headers);
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "getHeaders is not available:",
+            error
+        );
+
+    }
+
+    return [];
+}
+
+
+/* =========================================================
+   REFRESH COLUMNS
+   ========================================================= */
+
+async function refreshColumns(){
+
+    showMessage(
+        "در حال دریافت ستون‌های Google Sheet...",
+        "info"
+    );
+
+    const headers =
+        await fetchSheetHeaders();
+
+    if(headers.length){
+
+        availableHeaders =
+            collectAllHeaders(
+                foundCases,
+                headers
+            );
+
+        renderResults();
+
+        showMessage(
+            "ساختار ستون‌های Google Sheet به‌روزرسانی شد.",
+            "success"
+        );
+
+    }else{
+
+        availableHeaders =
+            collectAllHeaders(
+                foundCases,
+                availableHeaders
+            );
+
+        renderResults();
+
+        showMessage(
+            "ستون‌های موجود در پاسخ Google Sheet شناسایی شد. برای نمایش ستون‌های کاملاً جدید، Apps Script باید headers را نیز برگرداند.",
+            "info"
+        );
+
+    }
+}
+
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+function renderResults(){
+
+    const box =
+        document.getElementById("results");
+
+    box.innerHTML = "";
+
+
+    if(!foundCases.length){
+
+        box.innerHTML =
+        `
+        <div class="card empty-results">
+            هیچ پرونده‌ای پیدا نشد.
+        </div>
+        `;
+
+        return;
+
+    }
+
+
+    /*
+       ساخت فهرست نهایی ستون‌ها:
+       1) headers واقعی Sheet
+       2) کلیدهای موجود در پرونده
+       3) حذف کلیدهای داخلی با _
+    */
+    const headers =
+        collectAllHeaders(
+            foundCases,
+            availableHeaders
+        );
+
+
+    foundCases.forEach(function(c,index){
+
+        const caseNumber =
+            getCaseValue(
+                c,
+                [
+                    "Case Number",
+                    "caseNumber",
+                    "شماره پرونده",
+                    "شماره پروژه"
+                ]
+            );
+
+        const passport =
+            getCaseValue(
+                c,
+                [
+                    "Passport Number",
+                    "passport",
+                    "passportNumber",
+                    "شماره پاسپورت"
+                ]
+            );
+
+
+        let fields = "";
+
+
+        headers.forEach(function(key){
+
+            if(!key || key.startsWith("_")){
+                return;
+            }
+
+
+            /*
+               شناسه‌های اصلی جداگانه در هدر کارت نشان داده می‌شوند.
+               اما در قسمت ویرایش دوباره نمی‌آیند.
+            */
+            if(
+                isIdentifierField(key)
+            ){
+                return;
+            }
+
+
+            const value =
+                getCaseValue(
+                    c,
+                    [key]
+                );
+
+
+            const isNewField =
+                !(Object.prototype.hasOwnProperty.call(c,key));
+
+
+            fields += createFieldHTML(
+                index,
+                key,
+                value,
+                isNewField
+            );
+
+        });
+
+
+        box.innerHTML +=
+        `
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+                    ${escapeHTML(
+                        caseNumber || "پرونده"
+                    )}
+                </h3>
+
+                <div class="card-meta">
+                    Passport:
+                    ${escapeHTML(passport || "-")}
+                </div>
+
+            </div>
+
+
+            <div class="field readonly">
+
+                <label>
+                    شماره پرونده
+                </label>
+
+                <input
+                    value="${escapeAttribute(caseNumber || "")}"
+                    readonly
+                >
+
+            </div>
+
+
+            <div class="field readonly">
+
+                <label>
+                    شماره پاسپورت
+                </label>
+
+                <input
+                    value="${escapeAttribute(passport || "")}"
+                    readonly
+                >
+
+            </div>
+
+
+            ${fields}
+
+
+            <button
+                class="save"
+                id="saveButton-${index}"
+                onclick="saveCase(${index})"
+            >
+                ذخیره تمام تغییرات
+            </button>
+
+            <button
+                class="refresh-columns"
+                onclick="refreshColumns()"
+            >
+                دریافت آخرین ستون‌های Google Sheet
+            </button>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================================================
+   FIELD HTML
+   ========================================================= */
+
+function createFieldHTML(
+    index,
+    key,
+    value,
+    isNewField
+){
+
+    const label =
+        getFieldLabel(key);
+
+    const stringValue =
+        String(value ?? "");
+
+
+    const safeKey =
+        escapeAttribute(key);
+
+
+    const newClass =
+        isNewField
+        ? " new-field"
+        : "";
+
+
+    /*
+       برای متن‌های طولانی textarea استفاده می‌شود.
+    */
+    const isLongText =
+        stringValue.length > 120 ||
+        /notes|summary|report|document|letter|response|address|details|request/i.test(key);
+
+
+    return `
+        <div class="field${newClass}">
+
+            <label>
+
+                ${escapeHTML(label)}
+
+                ${
+                    isNewField
+                    ? '<span class="column-name">ستون جدید</span>'
+                    : ''
+                }
+
+            </label>
+
+            ${
+                isLongText
+                ?
+                `
+                <textarea
+                    data-case="${index}"
+                    data-field="${safeKey}"
+                >${escapeHTML(stringValue)}</textarea>
+                `
+                :
+                `
+                <input
+                    type="text"
+                    data-case="${index}"
+                    data-field="${safeKey}"
+                    value="${escapeAttribute(stringValue)}"
+                >
+                `
+            }
+
+        </div>
+    `;
+
+}
+
+
+/* =========================================================
+   SAVE
+   ========================================================= */
+
+async function saveCase(index){
+
+    if(!unlocked){
+        return;
+    }
+
+
+    const caseData =
+        foundCases[index];
+
+    if(!caseData){
+        return;
+    }
+
+
+    const inputs =
+        document.querySelectorAll(
+            `[data-case="${index}"]`
+        );
+
+
+    const updates = {};
+
+
+    inputs.forEach(function(input){
+
+        const field =
+            input.dataset.field;
+
+        if(!field){
+            return;
+        }
+
+        updates[field] =
+            input.value;
+
+    });
+
+
+    const button =
+        document.getElementById(
+            "saveButton-" + index
+        );
+
+
+    if(button){
+
+        button.disabled = true;
+
+        button.textContent =
+            "در حال ذخیره...";
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                        "text/plain;charset=utf-8"
+                    },
+
+                    body:JSON.stringify({
+
+                        action:"updateCase",
+
+                        passport:
+                        getCaseValue(
+                            caseData,
+                            [
+                                "Passport Number",
+                                "passport",
+                                "passportNumber",
+                                "شماره پاسپورت"
+                            ]
+                        ),
+
+                        caseNumber:
+                        getCaseValue(
+                            caseData,
+                            [
+                                "Case Number",
+                                "caseNumber",
+                                "شماره پرونده"
+                            ]
+                        ),
+
+                        updates:updates
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(data.success){
+
+            /*
+               داده محلی را نیز به‌روز می‌کنیم تا
+               پس از ذخیره، مقدار جدید در همان کارت باقی بماند.
+            */
+            Object.keys(updates).forEach(function(key){
+
+                caseData[key] =
+                    updates[key];
+
+            });
+
+
+            showMessage(
+                "تمام تغییرات با موفقیت در Google Sheet ثبت شد.",
+                "success"
+            );
+
+        }else{
+
+            showMessage(
+                data.message ||
+                "ذخیره انجام نشد.",
+                "error"
+            );
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "خطا هنگام ذخیره اطلاعات.",
+            "error"
+        );
+
+    }finally{
+
+        if(button){
+
+            button.disabled = false;
+
+            button.textContent =
+                "ذخیره تمام تغییرات";
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   HEADER HELPERS
+   ========================================================= */
+
+function normalizeHeaders(headers){
+
+    if(!Array.isArray(headers)){
+        return [];
+    }
+
+    return headers
+        .map(function(h){
+
+            if(
+                h &&
+                typeof h === "object"
+            ){
+
+                return String(
+                    h.name ??
+                    h.key ??
+                    h.header ??
+                    ""
+                ).trim();
+
+            }
+
+            return String(h ?? "").trim();
+
+        })
+        .filter(Boolean);
+
+}
+
+
+function collectAllHeaders(cases,headers){
+
+    const result = [];
+    const seen = new Set();
+
+
+    function add(key){
+
+        key =
+            String(key ?? "").trim();
+
+        if(!key || key.startsWith("_")){
+            return;
+        }
+
+        if(!seen.has(key)){
+
+            seen.add(key);
+            result.push(key);
+
+        }
+
+    }
+
+
+    /*
+       اول ترتیب واقعی Sheet
+    */
+    headers.forEach(add);
+
+
+    /*
+       سپس هر ستونی که در داده پرونده موجود است
+    */
+    (Array.isArray(cases) ? cases : [])
+        .forEach(function(c){
+
+            if(!c || typeof c !== "object"){
+                return;
+            }
+
+            Object.keys(c).forEach(add);
+
+        });
+
+
+    return result;
+
+}
+
+
+/* =========================================================
+   IDENTIFIERS
+   ========================================================= */
+
+function isIdentifierField(key){
+
+    const normalized =
+        String(key || "")
+            .trim()
+            .toLowerCase();
+
+    return [
+        "passport number",
+        "passport",
+        "passportnumber",
+        "شماره پاسپورت",
+        "case number",
+        "casenumber",
+        "شماره پرونده"
+    ].includes(normalized);
+
+}
+
+
+/* =========================================================
+   VALUE HELPERS
+   ========================================================= */
+
+function getCaseValue(obj,keys){
+
+    if(!obj || typeof obj !== "object"){
+        return "";
+    }
+
+    for(let i=0;i<keys.length;i++){
+
+        const key = keys[i];
+
+        if(
+            Object.prototype.hasOwnProperty.call(
+                obj,
+                key
+            )
+        ){
+
+            const value =
+                obj[key];
+
+            if(
+                value !== null &&
+                value !== undefined
+            ){
+
+                return value;
+
+            }
+
+        }
+
+    }
+
+    return "";
+
+}
+
+
+/* =========================================================
+   PERSIAN LABELS
+   ========================================================= */
+
+const FIELD_LABELS = {
+
+    "First Name":"نام",
+    "Last Name":"تخلص",
+    "Passport Number":"شماره پاسپورت",
+    "Password":"رمز عبور",
+    "Country":"کشور",
+    "Visa Type":"نوع ویزا",
+    "Case Number":"شماره پرونده",
+    "Date Applied":"تاریخ درخواست",
+    "Case Title":"عنوان پرونده",
+    "Application Progress":"پیشرفت درخواست",
+    "Application Status":"وضعیت درخواست",
+    "Application Photo":"تصویر متقاضی",
+    "Phone":"شماره تماس",
+    "WhatsApp":"واتساپ",
+    "Email":"ایمیل",
+    "Address":"آدرس",
+    "City":"شهر",
+    "Province":"ولایت",
+    "Nationality":"ملیت",
+    "Gender":"جنسیت",
+    "Date of Birth":"تاریخ تولد",
+    "Place of Birth":"محل تولد",
+    "Marital Status":"وضعیت تأهل",
+    "Father Name":"نام پدر",
+    "Mother Name":"نام مادر",
+    "Occupation":"شغل",
+    "Education":"تحصیلات",
+    "Submitted Request":"درخواست ارسال‌شده",
+    "Request Date":"تاریخ درخواست ارسالی",
+    "Request Reference":"شماره مرجع درخواست",
+    "Official Letter Received":"مکتوب رسمی دریافت‌شده",
+    "Official Response":"پاسخ رسمی",
+    "Authority Document":"مدرک دریافت‌شده از مرجع",
+    "Visa Document":"سند ویزا",
+    "Personal Documents":"مدارک شخصی",
+    "Family Documents":"مدارک خانوادگی",
+    "Required Documents":"مدارک مورد نیاز",
+    "Missing Documents":"مدارک ناقص / کمبود",
+    "Case Summary":"خلاصه پرونده",
+    "Case Report":"گزارش پرونده",
+    "Notes":"یادداشت‌ها",
+    "Case Manager":"مسئول پرونده",
+    "Officer":"آفیسر",
+    "Reference Number":"شماره مرجع",
+    "Created At":"تاریخ ایجاد",
+    "Updated At":"تاریخ به‌روزرسانی"
+
+};
+
+
+function getFieldLabel(key){
+
+    if(
+        Object.prototype.hasOwnProperty.call(
+            FIELD_LABELS,
+            key
+        )
+    ){
+
+        return FIELD_LABELS[key];
+
+    }
+
+
+    /*
+       اگر ستون جدید باشد، خود نام ستون
+       بدون حذف یا تغییر نمایش داده می‌شود.
+    */
+    return String(key || "ستون جدید");
+
+}
+
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+function showMessage(text,type){
+
+    const box =
+        document.getElementById(
+            "message"
+        );
+
+    box.textContent =
+        text;
+
+    box.className =
+        "message " + type;
+
+    box.style.display =
+        "block";
+
+}
+
+
+function hideMessage(){
+
+    const box =
+        document.getElementById(
+            "message"
+        );
+
+    box.style.display =
+        "none";
+
+}
+
+
+/* =========================================================
+   ESCAPE
+   ========================================================= */
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttribute(value){
+
+    return escapeHTML(value);
+
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        initializeAccess();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
